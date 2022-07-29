@@ -10,4 +10,4 @@ MERN Stack ToDos app with full CRUD functionality
 * MongoDB and Mongoose
 
 ## Getting Started
-* Heroku deployment: https://weatherwatchsei.herokuapp.com/
+* Heroku deployment: fierce-mesa-14335.herokuapp.com
