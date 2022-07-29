@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import React, {Component} from 'react'
+import Authentication from './pages/Authentication';
+import Todos from './pages/Todos';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export default class App extends Component {
+  state = {
+    user: null
+  }
 
-export default App;
+  setUserInState = (incomingUserData) => {
+    this.setState({user: incomingUserData})
+  }
+  
+  componentDidMount() {
+    let token = localStorage.getItem('token')
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      if (payload.exp < Date.now() / 1000) {
+        localStorage.removeItem('token')
+        token = null
+      } else {
+        this.setState({ user: payload.user })
+      }
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        {this.state.user ?
+          <Todos setUserInState={this.setUserInState} user={this.state.user} />
+        :
+          <Authentication setUserInState={this.setUserInState}/>
+        }
+      </div>
+    )
+  }
+}
